@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+{% block content %}
+
+<div id='range' style="display: none;">
+    <label>labelname</label>>
+    <input type="range" value="0" min="-2" max="2" list="tickmarks">
+    <datalist id="tickmarks">
+      <option value="-2" label="-2">
+      <option value="-1" label="-1">
+      <option value="0" label="0">
+      <option value="1" label="1">
+      <option value="2" label="2">
+    </datalist>
+</div>
+
+{% endblock %}

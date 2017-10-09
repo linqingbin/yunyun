@@ -1,0 +1,27 @@
+
+
+
+#sample_names,
+#feature_names {
+    display: none;
+
+}
+
+
+input {
+    padding: 5px;
+    border: none;
+    outline: none;
+    border-bottom: 1px solid grey;
+}
+
+.chat_label {
+    border: none;
+    background-color: #7597d2;
+    /*color: white;*/
+}
+
+#input_submit {
+    display: none;
+    margin-top: 1em;
+}

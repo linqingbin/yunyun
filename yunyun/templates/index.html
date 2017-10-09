@@ -1,40 +1,91 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>yunyun</title>
-    <link rel="stylesheet" href="static/botui.min.css" />
-    <link rel="stylesheet" href="static/botui-theme-default.css" />
-    <script src="https://cdn.jsdelivr.net/vue/latest/vue.min.js"></script>
-    <script src="static/botui.min.js"></script>
-</head>
-<body>
-<p>Hello Aliyun!</p>
+{% extends 'layout.html' %}
+{% block content %}
+<div id='basic'></div>
+    <div id='topic'>
+        <p>请输入本次讨论的主题</p>
+        <input type="text" name="topic" autofocus="true">
+    </div>
 
-<div class="botui-app-container" id="hello-world">
-  <bot-ui></bot-ui>
+    <div id='sample_names'>
+        <p>请输入要对比的对象（以逗号分隔）：</p>
+        <input type="text" name="sample_names">
+    </div>
+
+    <div id='feature_names'>
+        <p>请输入要比较的特征（以逗号分隔）：</p>
+        <input type="text" name="feature_names">
+    </div>
 </div>
 
-<script type="text/javascript">
-      var botui = new BotUI('hello-world');
 
-      botui.message.add({ // show a message
-          human: true,
-          content: 'Whats your name?'
-        }).then(function () { // wait till its shown
-          return botui.action.text({ // show 'text' action
-            action: {
-              placeholder: 'Your name'
+
+<div id='weight_input'></div>
+<div id='score_input'></div>
+<button id='input_submit'>提交</button>
+
+<script type="text/javascript">
+        var data = {}
+        var response = function (target,e) {
+             var key = e.which;
+             if(key == 13){
+                console.info(target.value)
+                data[target.name] = target.value;
+                $(target).attr('class','chat_label')
+                $(target).attr('readonly','true')
+                $(target).parent().next('div').css('display','block');
+                $(target).parent().next('div').find('input').focus();
+                if (target.name == 'feature_names'){
+                    feature_names = data['feature_names'].split(/\,|\，/)
+                    sample_names = data['sample_names'].split(',')
+                    weight_input(feature_names)
+                    score_input(feature_names,sample_names)
+                    $('#input_submit').css('display','block');
+                }
             }
+        }
+
+        $('input').keypress(function(e){response(this,e)});
+
+        var weight_input = function(feature_names){
+            for (feature of feature_names){
+                newElement = '<div><p>对于'+feature+'，请在下面选择权重：</p><input type="range" value="0" min="-2" max="2" name="feature_'+feature+'"></div>'
+                $('#weight_input').append(newElement);
+            }
+        }
+
+        var score_input = function(feature_names,sample_names){
+            for (feature_name of feature_names){
+                for (sample_name of sample_names){
+                    message = '对于'+feature_name+'，你觉得'+sample_name+'怎么样，请选择：'
+                    newElement = numinput(message,feature_name+'_'+sample_name)
+                    $('#score_input').append(newElement)
+                }
+            }
+        }
+
+        var numinput = function(message,name){
+            return '<div><p>'+message+'</p><input type="range" value="1" min="0" max="2" name="'+name+'"></div>'
+        }
+
+        $('#input_submit').click(function(){
+            console.info(data);
+            console.info($('input').length)
+            var formdata = {}
+            $('input').each(function(){
+                formdata[this.name] = this.value;
+            })
+            $.ajax({
+                url: "/data_submit",
+                data: formdata,
+                type: "POST",
+                dataType : "json",
+            }).done(function( json ) {
+                console.info(json);   
           });
-        }).then(function (res) { // get the result
-          botui.message.add({
-            delay: 1000,
-            loading: true,
-            content: 'Your name is ' + res.value
-          });
-        });
+        })
 
 </script>
 
+{% endblock %}
 </body>
 </html>
