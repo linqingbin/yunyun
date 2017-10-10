@@ -1,35 +1,37 @@
 {% extends 'layout.html' %}
 {% block content %}
-<div id='basic' class="input_area">
-    <h3>主题、对象和特征</h3>
-    <div id='topic'>
-        <p>请输入本次讨论的主题：</p>
-        <input type="text" name="topic" autofocus="true">
+<div id="container">
+    <div id='basic' class="input_area">
+        <h3>主题、对象和特征</h3>
+        <div id='topic'>
+            <p>请输入本次讨论的主题：</p>
+            <input type="text" name="topic" autofocus="true">
+        </div>
+
+        <div id='sample_names'>
+            <p>请输入要对比的对象（以逗号分隔）：</p>
+            <input type="text" name="sample_names">
+        </div>
+
+        <div id='feature_names'>
+            <p>请输入要比较的特征（以逗号分隔）：</p>
+            <input type="text" name="feature_names">
+        </div>
     </div>
 
-    <div id='sample_names'>
-        <p>请输入要对比的对象（以逗号分隔）：</p>
-        <input type="text" name="sample_names">
+
+
+    <div id='weight_input' class="input_area">
+        <h3>特征权重</h3>
+    </div>
+    <div id='score_input' class="input_area">
+        <h3>对象评分</h3>
     </div>
 
-    <div id='feature_names'>
-        <p>请输入要比较的特征（以逗号分隔）：</p>
-        <input type="text" name="feature_names">
-    </div>
+    <button id='submit_button'>提交</button>
+
+    <div id='result'></div>
 </div>
-
-
-
-<div id='weight_input' class="input_area">
-    <h3>特征权重</h3>
-</div>
-<div id='score_input' class="input_area">
-    <h3>对象评分</h3>
-</div>
-
-<button id='input_submit'>提交</button>
-
-<div id='result'></div>
 
 <script type="text/javascript">
         var data = {}
@@ -49,7 +51,7 @@
                     score_input(feature_names,sample_names)
                     $('#weight_input').css('display','block');
                     $('#score_input').css('display','block');
-                    $('#input_submit').css('display','block');
+                    $('#submit_button').css('display','block');
                 }
             }
         }
@@ -79,7 +81,7 @@
             return '<div><p>'+message+'</p><input type="range" value="1" min="0" max="2" name="score_'+name+'"></div>'
         }
 
-        $('#input_submit').click(function(){
+        $('#submit_button').click(function(){
             console.info($('input').length)
             var formdata = {}
             
