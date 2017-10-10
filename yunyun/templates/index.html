@@ -1,8 +1,9 @@
 {% extends 'layout.html' %}
 {% block content %}
-<div id='basic'></div>
+<div id='basic' class="input_area">
+    <h3>主题、对象和特征</h3>
     <div id='topic'>
-        <p>请输入本次讨论的主题</p>
+        <p>请输入本次讨论的主题：</p>
         <input type="text" name="topic" autofocus="true">
     </div>
 
@@ -19,9 +20,16 @@
 
 
 
-<div id='weight_input'></div>
-<div id='score_input'></div>
+<div id='weight_input' class="input_area">
+    <h3>特征权重</h3>
+</div>
+<div id='score_input' class="input_area">
+    <h3>对象评分</h3>
+</div>
+
 <button id='input_submit'>提交</button>
+
+<div id='result'></div>
 
 <script type="text/javascript">
         var data = {}
@@ -36,9 +44,11 @@
                 $(target).parent().next('div').find('input').focus();
                 if (target.name == 'feature_names'){
                     feature_names = data['feature_names'].split(/\,|\，/)
-                    sample_names = data['sample_names'].split(',')
+                    sample_names = data['sample_names'].split(/\,|\，/)
                     weight_input(feature_names)
                     score_input(feature_names,sample_names)
+                    $('#weight_input').css('display','block');
+                    $('#score_input').css('display','block');
                     $('#input_submit').css('display','block');
                 }
             }
@@ -48,7 +58,7 @@
 
         var weight_input = function(feature_names){
             for (feature of feature_names){
-                newElement = '<div><p>对于'+feature+'，请在下面选择权重：</p><input type="range" value="0" min="-2" max="2" name="feature_'+feature+'"></div>'
+                newElement = '<div><p>对于'+feature+'，请在下面选择权重：</p><input type="range" value="0" min="-2" max="2" name="weight_'+feature+'"></div>'
                 $('#weight_input').append(newElement);
             }
         }
@@ -60,27 +70,30 @@
                     newElement = numinput(message,feature_name+'_'+sample_name)
                     $('#score_input').append(newElement)
                 }
+                $('#score_input').append('<hr>')
             }
+            $('#score_input').find('hr').last().remove()
         }
 
         var numinput = function(message,name){
-            return '<div><p>'+message+'</p><input type="range" value="1" min="0" max="2" name="'+name+'"></div>'
+            return '<div><p>'+message+'</p><input type="range" value="1" min="0" max="2" name="score_'+name+'"></div>'
         }
 
         $('#input_submit').click(function(){
-            console.info(data);
             console.info($('input').length)
             var formdata = {}
+            
             $('input').each(function(){
                 formdata[this.name] = this.value;
             })
+            console.info(formdata)
             $.ajax({
                 url: "/data_submit",
                 data: formdata,
                 type: "POST",
-                dataType : "json",
-            }).done(function( json ) {
-                console.info(json);   
+                dataType : "text",
+            }).done(function( text ) {
+                $('#result').html(text);
           });
         })
 

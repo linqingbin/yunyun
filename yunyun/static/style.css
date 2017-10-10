@@ -22,6 +22,48 @@ input {
 }
 
 #input_submit {
-    display: none;
     margin-top: 1em;
+}
+
+#weight_input,
+#score_input,
+#input_submit {
+    display: none;
+}
+
+
+#basic,
+#weight_input,
+#score_input {
+    border: 1px solid grey;
+    padding: 1em;
+    width: 500px;
+}
+
+/*#weight_input {
+    border: 1px solid  red;
+}
+
+#score_input {
+    border: 1px solid  yellow;
+}
+*/
+
+table {
+    border-collapse:collapse;
+    border:1px solid #aaa;
+    width:500px;
+    margin-top: 1em
+}
+th {
+    vertical-align:baseline;
+    padding:5px 15px 5px 6px;
+    border:1px solid #aaa;
+    text-align:left;
+}
+
+td {
+    vertical-align:text-top;
+    padding:6px 15px;
+    border:1px solid #aaa;
 }
