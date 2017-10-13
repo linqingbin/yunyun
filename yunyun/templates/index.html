@@ -5,16 +5,16 @@
         <h3>主题、对象和特征</h3>
         <div id='topic'>
             <p>请输入本次讨论的主题：</p>
-            <input type="text" name="topic" autofocus="true">
+            <input type="text" name="topic" autofocus="true" placeholder='例如存在还是不存在'>
         </div>
 
         <div id='sample_names'>
-            <p>请输入要对比的对象（以逗号分隔）：</p>
+            <p>请输入对比的对象（以逗号分隔）：</p>
             <input type="text" name="sample_names">
         </div>
 
         <div id='feature_names'>
-            <p>请输入要比较的特征（以逗号分隔）：</p>
+            <p>请输入对象的特征（以逗号分隔）：</p>
             <input type="text" name="feature_names">
         </div>
     </div>
@@ -32,6 +32,20 @@
 
     <div id='result'></div>
 </div>
+
+<datalist id="tickmarks_1">
+    <option value="0">
+    <option value="1">
+    <option value="2">
+</datalist>
+
+<datalist id="tickmarks_2">
+    <option value="-2">
+    <option value="-1">
+    <option value="0">
+    <option value="1">
+    <option value="2">
+</datalist>
 
 <script type="text/javascript">
         var data = {}
@@ -60,25 +74,25 @@
 
         var weight_input = function(feature_names){
             for (feature of feature_names){
-                newElement = '<div><p>对于'+feature+'，请在下面选择权重：</p><input type="range" value="0" min="-2" max="2" name="weight_'+feature+'"></div>'
+                var newElement = '<div><p>对于'+feature+'，请在下面选择权重：</p><input type="range" value="0" min="-2" max="2" name="weight_'+feature+'" list="tickmarks_2"></div>';
                 $('#weight_input').append(newElement);
-            }
-        }
+            };
+        };
 
         var score_input = function(feature_names,sample_names){
             for (feature_name of feature_names){
                 for (sample_name of sample_names){
-                    message = '对于'+feature_name+'，你觉得'+sample_name+'怎么样，请选择：'
-                    newElement = numinput(message,feature_name+'_'+sample_name)
-                    $('#score_input').append(newElement)
+                    message = '对于'+feature_name+'，你觉得'+sample_name+'怎么样，请选择：';
+                    newElement = numinput(message,feature_name+'_'+sample_name);
+                    $('#score_input').append(newElement);
                 }
-                $('#score_input').append('<hr>')
+                $('#score_input').append('<hr>');
             }
             $('#score_input').find('hr').last().remove()
         }
 
         var numinput = function(message,name){
-            return '<div><p>'+message+'</p><input type="range" value="1" min="0" max="2" name="score_'+name+'"></div>'
+            return '<div><p>'+message+'</p><input type="range" value="1" min="0" max="2" name="score_'+name+'" list="tickmarks_2"></div>'
         }
 
         $('#submit_button').click(function(){
