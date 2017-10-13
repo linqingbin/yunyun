@@ -29,8 +29,8 @@ def data_submit():
                 scores.append(score_match.groups()[0].split('_') + [value])
     # pd.DataFrame(scores)
     print(feature_weights,scores)
+    feature_weights = [x[1] for x in feature_weights]
     df = parse(feature_weights,scores)
-
     return df.to_html(classes = '" id = "result_table',index=False)
 
 def parse(feature_weights,scores):
@@ -39,8 +39,9 @@ def parse(feature_weights,scores):
     df.set_index(['solution','feature'],inplace=True)
     df = df.unstack()
     df.columns = df.columns.get_level_values('feature')
-    profit_arr = cal_profit(df.values,[x[1] for x in feature_weights])
+    profit_arr = cal_profit(df.values,feature_weights)
     df['profit'] = profit_arr
+    df.loc['weight'] = feature_weights+['-']
     df.reset_index(inplace=True)
     return df
 
